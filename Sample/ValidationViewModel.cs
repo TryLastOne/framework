@@ -1,22 +1,21 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
+using PC.Framework;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Shiny;
 
 namespace Sample;
 
 
-public class ValidationViewModel : ViewModel
+public sealed class ValidationViewModel : ViewModel
 {
     public ValidationViewModel(BaseServices services) : base(services)
     {
-        this.Save = ReactiveCommand.CreateFromTask(
+        Save = ReactiveCommand.CreateFromTask(
             async () => await this.Dialogs.Snackbar("Fired Saved because form was valid"),
             this.WhenValid()
         );
-        this.BindValidation();
+        BindValidation();
     }
 
 

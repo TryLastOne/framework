@@ -1,8 +1,7 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using PC.Framework;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Shiny;
 
 namespace Sample;
 

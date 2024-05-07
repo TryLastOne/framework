@@ -1,8 +1,4 @@
-﻿using Prism.Container.DryIoc;
-using Shiny;
-using Prism.Navigation;
-
-namespace Sample;
+﻿namespace Sample;
 
 
 public static class MauiProgram
@@ -14,16 +10,12 @@ public static class MauiProgram
 			var builder = MauiApp
 				.CreateBuilder()
 				.UseMauiApp<App>()
-				.UseShinyFramework(
+				.UsePcFramework(
 					new DryIocContainerExtension(),
 					prism => prism.CreateWindow(
 						"NavigationPage/MainPage",
-						ex =>
-						{
-							Console.WriteLine(ex);
-						}
-					),
-                    new(ErrorAlertType.FullError)
+						Console.WriteLine
+					)
                 )
 				.ConfigureFonts(fonts =>
 				{

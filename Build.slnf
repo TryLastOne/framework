@@ -1,8 +1,8 @@
 {
   "solution": {
-    "path": "Shiny.Framework.sln",
+    "path": "PC.Framework.sln",
     "projects": [
-      "src\\Shiny.Framework\\Shiny.Framework.csproj"
+      "src\\PC.Framework\\PC.Framework.csproj"
     ]
   }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Windows.Input;
-using PC.Framework;
 using ReactiveUI;
 
 namespace Sample;
@@ -13,20 +12,17 @@ public class MainViewModel : ViewModel
     public MainViewModel(BaseServices services) : base(services)
     {
         // TODO: test localization
-        this.TestGEH = ReactiveCommand.Create(
-            () =>
-            {
-                throw new ArgumentException("This shouldn't crash your app.  You should be seeing this message in a dialog");
-            }
+        TestGeh = ReactiveCommand.Create(
+            () => throw new ArgumentException("This shouldn't crash your app.  You should be seeing this message in a dialog")
             //this.WhenValid() // this is a hack to ensure prism & shiny are playing nice together
         );
 
-        this.NavToValidate = this.Navigation.Command("ValidationPage");
-        this.NavToDialogs = this.Navigation.Command("DialogsPage");
+        NavToValidate = Navigation.Command("ValidationPage");
+        NavToDialogs = Navigation.Command("DialogsPage");
     }
 
 
-    public ICommand TestGEH { get; }
+    public ICommand TestGeh { get; }
     public ICommand NavToValidate { get; }
     public ICommand NavToDialogs { get; }
 }

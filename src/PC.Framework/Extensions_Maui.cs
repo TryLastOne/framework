@@ -16,7 +16,7 @@ using Shiny;
 namespace PC.Framework;
 
 
-public static partial class MauiExtensions
+public static class MauiExtensions
 {
     /// <summary>
     /// 
@@ -26,11 +26,13 @@ public static partial class MauiExtensions
     /// <param name="prismBuilder"></param>
     /// <param name="exceptionConfig"></param>
     /// <returns></returns>
-    public static MauiAppBuilder UsePcFramework(this MauiAppBuilder builder, IContainerExtension container, Action<PrismAppBuilder> prismBuilder, GlobalExceptionHandlerConfig? exceptionConfig = null)
+    public static MauiAppBuilder UsePcFramework(this MauiAppBuilder builder, IContainerExtension container, Action<PrismAppBuilder> prismBuilder, GlobalExceptionHandlerConfig? exceptionConfig
+ = null)
     {
-        builder
-            .UsePrism(container, prismBuilder)
-            .UseShiny();
+        
+        builder.UsePrism(container, prismBuilder)
+                .UseShiny()
+                .UseMauiCommunityToolkit();
       
         builder.Services.AddSingleton<IGlobalNavigationService, GlobalNavigationService>();
 
@@ -39,8 +41,14 @@ public static partial class MauiExtensions
         builder.Services.TryAddSingleton<GlobalExceptionAction>();
         builder.Services.AddConnectivity();
         builder.Services.AddScoped<BaseServices>();
+        
+        if (builder.Services.All(x => x.ServiceType != typeof(IDialogs)))
+        {
+            builder.Services.AddSingleton<IDialogs, NativeDialogs>();
+        }
 
         RxApp.DefaultExceptionHandler = new GlobalExceptionHandler();
+	  
         return builder;
     }
 }

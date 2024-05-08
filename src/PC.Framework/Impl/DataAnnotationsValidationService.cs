@@ -15,19 +15,16 @@ public class DataAnnotationsValidationService(IStringLocalizerFactory? localizat
 {
     public bool IsValid(object obj, string? propertyName = null)
     {
-        if (propertyName == null)
-        {
-            var context = new ValidationContext(obj);
-            var results = new List<ValidationResult>();
-            var result = Validator.TryValidateObject(
-                obj,
-                context,
-                results,
-                true
-            );
-            return result;
-        }
-        return !ValidateProperty(obj, propertyName).Any();
+        if (propertyName != null) return !ValidateProperty(obj, propertyName).Any();
+        var context = new ValidationContext(obj);
+        var results = new List<ValidationResult>();
+        var result = Validator.TryValidateObject(
+            obj,
+            context,
+            results,
+            true
+        );
+        return result;
     }
 
 
@@ -83,20 +80,17 @@ public class DataAnnotationsValidationService(IStringLocalizerFactory? localizat
 
     protected virtual string GetErrorMessage(object obj, ValidationResult result)
     {
-        if (result.ErrorMessage?.StartsWith("localize:") ?? false)
-        {
-            if (localizationManager == null)
-                throw new ArgumentException("Localization has not been put into your startup");
+        if (!(result.ErrorMessage?.StartsWith("localize:") ?? false)) return result.ErrorMessage!;
+        if (localizationManager == null)
+            throw new ArgumentException("Localization has not been put into your startup");
 
-            var key = result.ErrorMessage.Replace("localize:", String.Empty);
-            var localize = localizationManager.Create(obj.GetType());
+        var key = result.ErrorMessage.Replace("localize:", String.Empty);
+        var localize = localizationManager.Create(obj.GetType());
 
-            return localize[key];
-        }
-        return result.ErrorMessage!;
+        return localize[key];
     }
 
 
     protected static object? GetValue(object obj, string propertyName)
-        => obj.GetType()?.GetProperty(propertyName)?.GetValue(obj, null);
+        => obj.GetType().GetProperty(propertyName)?.GetValue(obj, null);
 }

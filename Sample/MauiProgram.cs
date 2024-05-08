@@ -7,16 +7,23 @@ public static class MauiProgram
 	{
 		try
 		{
+
 			var builder = MauiApp
 				.CreateBuilder()
 				.UseMauiApp<App>()
 				.UsePcFramework(
 					new DryIocContainerExtension(),
-					prism => prism.CreateWindow(
+					
+					prism =>
+						prism.CreateWindow(
 						"NavigationPage/MainPage",
-						Console.WriteLine
+						exception =>
+						{
+							Console.WriteLine(exception.Message);
+						}
 					)
                 )
+
 				.ConfigureFonts(fonts =>
 				{
 					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -25,11 +32,11 @@ public static class MauiProgram
 
 			builder.Services.AddLocalization();
 			builder.Services.AddDataAnnotationValidation();
-
-			builder.Services.RegisterForNavigation<MainPage, MainViewModel>();
+			
+			builder.Services.RegisterForNavigation<MainPage, MainViewModel>("MainPage");
 			builder.Services.RegisterForNavigation<DialogsPage, DialogsViewModel>();
 			builder.Services.RegisterForNavigation<ValidationPage, ValidationViewModel>();
-
+			
 			return builder.Build();
 		}
 		catch (Exception ex)

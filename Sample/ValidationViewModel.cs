@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
-using PC.Framework;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -12,8 +11,8 @@ public sealed class ValidationViewModel : ViewModel
     public ValidationViewModel(BaseServices services) : base(services)
     {
         Save = ReactiveCommand.CreateFromTask(
-            async () => await this.Dialogs.Snackbar("Fired Saved because form was valid"),
-            this.WhenValid()
+            async () => await Dialogs.Snackbar("Fired Saved because form was valid"),
+            WhenValid()
         );
         BindValidation();
     }

@@ -16,76 +16,68 @@ public abstract class FuncViewModel(BaseServices services) : ViewModel(services)
     protected Action<INavigationParameters>? NavTo { get; set; }
     protected Func<INavigationParameters, Task>? NavToTask { get; set; }
     protected Action<INavigationParameters>? NavFrom { get; set; }
-
     protected Func<IDisposable[]>? WithDisappear { get; set; }
     protected Func<IDisposable[]>? WithDestroy { get; set; }
 
     public override Task InitializeAsync(INavigationParameters parameters)
     {
-        if (this.Init == null)
+        if (Init == null)
             return Task.CompletedTask;
 
-        if (this.WithDestroy != null)
-        {
-            var en = this.WithDestroy.Invoke();
-            this.DestroyWith.AddRange(en);
-        }
+        if (WithDestroy == null) return Init.Invoke(parameters);
+        var en = WithDestroy.Invoke();
+        DestroyWith.AddRange(en);
 
-        return this.Init.Invoke(parameters);
+        return Init.Invoke(parameters);
     }
 
 
     public override Task<bool> CanNavigateAsync(INavigationParameters parameters)
     {
-        if (this.CanNav == null)
-            return Task.FromResult(true);
-
-        return this.CanNav.Invoke();
+        return CanNav == null ? Task.FromResult(true) : CanNav.Invoke();
     }
 
 
     public override async void OnNavigatedTo(INavigationParameters parameters)
     {
         base.OnNavigatedTo(parameters);
-        this.NavTo?.Invoke(parameters);
+        NavTo?.Invoke(parameters);
 
-        if (this.NavToTask != null)
-            await this.SafeExecuteAsync(() => this.NavToTask.Invoke(parameters));
+        if (NavToTask != null)
+            await SafeExecuteAsync(() => NavToTask.Invoke(parameters));
     }
 
 
     public override void OnNavigatedFrom(INavigationParameters parameters)
     {
         base.OnNavigatedFrom(parameters);
-        this.NavFrom?.Invoke(parameters);
+        NavFrom?.Invoke(parameters);
     }
 
 
     public override async void OnAppearing()
     {
         base.OnAppearing();
-        this.Appearing?.Invoke();
-        if (this.AppearingTask != null)
-            await this.SafeExecuteAsync(this.AppearingTask);
+        Appearing?.Invoke();
+        if (AppearingTask != null)
+            await SafeExecuteAsync(AppearingTask);
 
-        if (this.WithDisappear != null)
-        {
-            var en = this.WithDisappear.Invoke();
-            this.DeactivateWith.AddRange(en);
-        }
+        if (WithDisappear == null) return;
+        var en = WithDisappear.Invoke();
+        DeactivateWith.AddRange(en);
     }
 
 
     public override void OnDisappearing()
     {
         base.OnDisappearing();
-        this.Disappearing?.Invoke();
+        Disappearing?.Invoke();
     }
 
 
     public override void Destroy()
     {
         base.Destroy();
-        this.BeforeDestroy?.Invoke();
+        BeforeDestroy?.Invoke();
     }
 }

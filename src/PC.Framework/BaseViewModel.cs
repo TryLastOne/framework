@@ -19,7 +19,7 @@ public abstract class BaseViewModel(BaseServices services) : ReactiveObject, IDe
     protected BaseServices Services { get; } = services;
     protected INavigationService Navigation => Services.Navigation;
     private ICommand? _navigateCommand;
-    public ICommand Navigate => _navigateCommand ??= Navigation.GeneralNavigateCommand();
+    public ICommand NavigateCommand => _navigateCommand ??= Navigation.GeneralNavigateCommand();
 
 
     private bool _isBusy;
@@ -61,12 +61,10 @@ public abstract class BaseViewModel(BaseServices services) : ReactiveObject, IDe
 
 
     protected virtual void BindValidation()
-    {        
-        if (Validation == null && Services.Validation != null)
-        {
-            Validation = Services.Validation.Bind(this);
-            DestroyWith.Add(Validation);
-        }
+    {
+        if (Validation != null || Services.Validation == null) return;
+        Validation = Services.Validation.Bind(this);
+        DestroyWith.Add(Validation);
     }
 
 
@@ -131,7 +129,7 @@ public abstract class BaseViewModel(BaseServices services) : ReactiveObject, IDe
     /// <summary>
     /// The localization source for this instance - will attempt to use the default section (if registered)
     /// </summary>
-    public IStringLocalizer? Localize => _localizer ??= Services.StringLocalizationFactory!.Create(GetType());
+    public IStringLocalizer Localize => _localizer ??= Services.StringLocalizationFactory!.Create(GetType());
 
 
     /// <summary>

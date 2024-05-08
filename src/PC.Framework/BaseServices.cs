@@ -18,18 +18,19 @@ namespace PC.Framework;
 /// <param name="Connectivity"></param>
 /// <param name="LoggerFactory"></param>
 /// <param name="Validation"></param>
-/// <param name="StringLocalizationFactory"></param>
+/// <param name="Platform"></param>
+ 
 
 public record BaseServices(
-    #if PLATFORM
+#if PLATFORM
     IPlatform Platform,
-    #endif
+#endif
     INavigationService Navigation,
     IDialogs Dialogs,
     IObjectStoreBinder ObjectBinder,
     GlobalExceptionAction ErrorHandler,
     IConnectivity Connectivity,
     ILoggerFactory LoggerFactory,
-    IValidationService? Validation = null, 
+    IValidationService? Validation = null,
     IStringLocalizerFactory? StringLocalizationFactory = null
 );

@@ -9,7 +9,7 @@ namespace PC.Framework;
 /// <summary>
 /// 
 /// </summary>
-public abstract class GlobalExceptionAction
+public class GlobalExceptionAction
 {
     private readonly GlobalExceptionHandlerConfig _config;
     private readonly IStringLocalizer? _localize;
@@ -24,7 +24,7 @@ public abstract class GlobalExceptionAction
     /// <param name="logger"></param>
     /// <param name="dialogs"></param>
     /// <param name="localize"></param>
-    protected GlobalExceptionAction(
+    public GlobalExceptionAction(
         GlobalExceptionHandlerConfig config,
         ILogger<GlobalExceptionAction> logger,
         IDialogs dialogs,

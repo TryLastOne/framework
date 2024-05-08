@@ -28,6 +28,9 @@ public abstract class ViewModel : BaseViewModel,
     /// <returns></returns>
     public virtual Task InitializeAsync(INavigationParameters parameters)
         => Task.CompletedTask;
+    
+    public virtual Task StartupAsync(INavigationParameters parameters)
+        => Task.CompletedTask;
 
     /// <summary>
     /// 
@@ -48,7 +51,13 @@ public abstract class ViewModel : BaseViewModel,
     /// 
     /// </summary>
     /// <param name="parameters"></param>
-    public virtual void OnNavigatedTo(INavigationParameters parameters) { }
+    public virtual void OnNavigatedTo(INavigationParameters parameters)
+    {
+        if (parameters.IsNewNavigation()) 
+        {
+            Task.Run(() => StartupAsync(parameters));
+        }
+    }
     /// <summary>
     /// 
     /// </summary>

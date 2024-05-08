@@ -340,3 +340,4 @@ ASALocalRun/
 healthchecksdb
 secrets.json
 .DS_Store
+Build/

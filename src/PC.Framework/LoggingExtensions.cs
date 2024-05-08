@@ -31,11 +31,9 @@ public static class LoggingExtensions
         return Disposable.Create(() =>
         {
             sw.Stop();
-            if (sw.Elapsed >= slowTime)
-            {
-                var msg = getMsg.Invoke(sw.Elapsed);
-                logger.LogWarning(msg);
-            }
+            if (!(sw.Elapsed >= slowTime)) return;
+            var msg = getMsg.Invoke(sw.Elapsed);
+            logger.LogWarning(msg);
         });
     }
 
